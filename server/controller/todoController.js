@@ -2,9 +2,8 @@ const userModel = require("../models/todoModel");
 
 const todoCreate = async (req, res) => {
   const data = new userModel({
-    name: req.body.name,
-    email: req.body.email,
-    phone: req.body.phone,
+    todo: req.body.todo,
+    isCompleted: req.body.isCompleted,
   });
   await data.save();
   res.json({ success: true, message: "Data created successfully" });
@@ -27,9 +26,8 @@ const todoFind = async (req, res) => {
   const data = await userModel.findOne({ _id: id });
   res.json({
     success: true,
-    name: data.name,
-    email: data.email,
-    phone: data.phone,
+    todo: data.todo,
+    isCompleted: data.isCompleted,
   });
 };
 module.exports = { todoCreate, todoUpdate, todoDelete, todoFind };

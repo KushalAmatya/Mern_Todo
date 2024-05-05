@@ -2,9 +2,8 @@ const mongoose = require("mongoose");
 
 const todoSchema = new mongoose.Schema(
   {
-    name: { type: String, required: true },
-    email: { type: String, required: true },
-    phone: { type: Number, required: true },
+    todo: { type: String, required: true },
+    isCompleted: { type: Boolean, required: true },
   },
   {
     timestamps: true,
