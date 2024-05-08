@@ -22,12 +22,8 @@ const todoDelete = async (req, res) => {
 };
 
 const todoFind = async (req, res) => {
-  const { id } = req.body;
-  const data = await userModel.findOne({ _id: id });
-  res.json({
-    success: true,
-    todo: data.todo,
-    isCompleted: data.isCompleted,
-  });
+  // const { id } = req.body;
+  const data = await userModel.find({});
+  res.json(data);
 };
 module.exports = { todoCreate, todoUpdate, todoDelete, todoFind };

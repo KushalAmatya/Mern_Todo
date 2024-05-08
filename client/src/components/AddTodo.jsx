@@ -1,14 +1,28 @@
 import React, { useState } from "react";
+import axios from "axios";
+
+axios.defaults.baseURL = "http://localhost:3000";
 function AddTodo() {
-  const [todo, setTodo] = useState("");
+  // const [todo, setTodo] = useState("");
+  const [todo, setTodo] = useState({
+    todo: "",
+    isCompleted: false,
+  });
   const handleChange = (e) => {
-    setTodo(e.target.value);
+    const { value } = e.target;
+    setTodo((prev) => ({
+      ...prev,
+      todo: value,
+    }));
   };
-  const handleClick = () => {
-    if (!todo) {
-      return;
-    }
-    console.log(todo);
+  const handleClick = async () => {
+    if (!todo.todo) return;
+    const data = await axios.post("/create", todo);
+    console.log(data);
+    setTodo({
+      todo: "",
+      isCompleted: false,
+    });
   };
   return (
     <>
@@ -20,6 +34,7 @@ function AddTodo() {
             className="w-full p-2 border border-gray-300 rounded"
             placeholder="Add a new task"
             onChange={handleChange}
+            value={todo.todo}
           />
           <button
             className="mt-2 bg-blue-500 text-white p-2 rounded"
