@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import axios from "axios";
+import { TodoContext } from "../context/todo.context";
 
 axios.defaults.baseURL = "http://localhost:3000";
 function AddTodo() {
   // const [todo, setTodo] = useState("");
+  const { data, setData } = useContext(TodoContext);
   const [todo, setTodo] = useState({
     todo: "",
     isCompleted: false,
@@ -17,11 +19,11 @@ function AddTodo() {
   };
   const handleClick = async () => {
     if (!todo.todo) return;
-    const data = await axios.post("/create", todo);
-    console.log(data);
+    const tododata = await axios.post("/create", todo);
+    console.log(tododata);
     setTodo({
-      todo: "",
-      isCompleted: false,
+      todo: tododata.data.data.todo,
+      isCompleted: tododata.data.data.isCompleted,
     });
   };
   return (

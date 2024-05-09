@@ -1,19 +1,20 @@
-import React, { useState, useEffect } from "react";
+import React, { useContext, useState } from "react";
 import axios from "axios";
-
+import { TodoContext } from "../context/todo.context";
 axios.defaults.baseURL = "http://localhost:3000";
 const Table = () => {
+  const { data } = useContext(TodoContext);
   const [btnclick, setBtnclick] = useState(false);
-  const [data, setData] = useState([]);
+  // const [data, setData] = useState([]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const result = await axios.get("/find");
-      setData(result.data);
-      console.log(data);
-    };
-    fetchData();
-  }, []);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const result = await axios.get("/find");
+  //     setData((prev) => [...prev, ...result.data]);
+  //   };
+  //   fetchData();
+  // }, []);
+  console.log(data, "data hello");
   return (
     <>
       <div className="overflow-x-auto mx-12">
@@ -26,18 +27,20 @@ const Table = () => {
             </tr>
           </thead>
           <tbody>
-            {data.map((item) => (
+            {data?.map((item, index) => (
               <tr key={item.id}>
                 <td className="border px-3 py-2">{item.todo}</td>
                 <td className="border px-3 py-2 text-center">
                   <button
                     className={`middle none center rounded-lg ${
-                      btnclick ? "bg-green-400" : "bg-pink-700"
+                      btnclick && item.isCompleted == true
+                        ? "bg-green-400"
+                        : "bg-pink-700"
                     } py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-pink-500/20 transition-all hover:shadow-lg hover:cursor-default hover:shadow-pink-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none`}
                     data-ripple-light="true"
                     onClick={() => setBtnclick(!btnclick)}
                   >
-                    {btnclick ? "Yes" : "No"}
+                    {item.isCompleted ? "Yes" : "No"}
                   </button>
                 </td>
                 <td className="border px-3 py-2 text-cen ter">

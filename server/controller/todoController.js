@@ -6,7 +6,11 @@ const todoCreate = async (req, res) => {
     isCompleted: req.body.isCompleted,
   });
   await data.save();
-  res.json({ success: true, message: "Data created successfully" });
+  res.json({
+    success: true,
+    message: "Data created successfully",
+    data: { todo: req.body.todo, isCompleted: req.body.isCompleted },
+  });
 };
 
 const todoUpdate = async (req, res) => {
@@ -24,6 +28,7 @@ const todoDelete = async (req, res) => {
 const todoFind = async (req, res) => {
   // const { id } = req.body;
   const data = await userModel.find({});
+  console.log(data);
   res.json(data);
 };
 module.exports = { todoCreate, todoUpdate, todoDelete, todoFind };
