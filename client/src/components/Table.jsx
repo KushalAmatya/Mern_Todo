@@ -1,20 +1,12 @@
 import React, { useContext, useState } from "react";
 import axios from "axios";
 import { TodoContext } from "../context/todo.context";
+// import { set } from "mongoose";
 axios.defaults.baseURL = "http://localhost:3000";
 const Table = () => {
-  const { data } = useContext(TodoContext);
+  const { data, setData } = useContext(TodoContext);
   const [btnclick, setBtnclick] = useState(false);
-  // const [data, setData] = useState([]);
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     const result = await axios.get("/find");
-  //     setData((prev) => [...prev, ...result.data]);
-  //   };
-  //   fetchData();
-  // }, []);
-  console.log(data, "data hello");
   return (
     <>
       <div className="overflow-x-auto mx-12">
@@ -28,26 +20,55 @@ const Table = () => {
           </thead>
           <tbody>
             {data?.map((item, index) => (
-              <tr key={item.id}>
-                <td className="border px-3 py-2">{item.todo}</td>
-                <td className="border px-3 py-2 text-center">
+              <tr
+                key={item.id}
+                className={`${
+                  index % 2 == 0 ? "bg-slate-200" : "bg-slate-600"
+                }`}
+              >
+                <td className="border px-3 py-2 border-slate-900">
+                  {item.todo}
+                </td>
+                <td className="border px-3 py-2 text-center border-slate-900">
                   <button
                     className={`middle none center rounded-lg ${
-                      btnclick && item.isCompleted == true
-                        ? "bg-green-400"
-                        : "bg-pink-700"
+                      item.isCompleted ? "bg-green-400" : "bg-pink-700"
                     } py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-pink-500/20 transition-all hover:shadow-lg hover:cursor-default hover:shadow-pink-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none`}
                     data-ripple-light="true"
-                    onClick={() => setBtnclick(!btnclick)}
+                    onClick={async () => {
+                      const updateddat = await axios.put("/update", {
+                        id: item._id,
+                        isCompleted: !item.isCompleted,
+                      });
+                      setBtnclick(!btnclick);
+                      console.log(updateddat, "updated data");
+                      setData(updateddat.data.data);
+                    }}
                   >
                     {item.isCompleted ? "Yes" : "No"}
                   </button>
                 </td>
-                <td className="border px-3 py-2 text-cen ter">
+                <td className="border px-3 py-2 text-center center">
                   <button className="bg-blue-500 text-white p-2 rounded">
                     Edit
                   </button>
-                  <button className="bg-red-500 text-white p-2 rounded ml-2">
+                  <button
+                    className="bg-red-500 text-white p-2 rounded ml-2"
+                    onClick={() => {
+                      axios
+                        .delete("/delete", {
+                          data: {
+                            id: item._id,
+                          },
+                        })
+                        .then((res) => {
+                          console.log(res, "yoyoyo");
+                          setData((prev) =>
+                            prev.filter((i) => i._id !== item._id)
+                          );
+                        });
+                    }}
+                  >
                     Delete
                   </button>
                 </td>

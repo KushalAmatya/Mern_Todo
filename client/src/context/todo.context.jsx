@@ -8,7 +8,8 @@ export const TodoProvider = ({ children }) => {
   useEffect(() => {
     const fetchData = async () => {
       const result = await axios.get("/find");
-      setData((prev) => [...prev, ...result.data]);
+      setData(result.data);
+      console.log(result);
     };
     fetchData();
   }, []);

@@ -10,6 +10,7 @@ function AddTodo() {
     todo: "",
     isCompleted: false,
   });
+
   const handleChange = (e) => {
     const { value } = e.target;
     setTodo((prev) => ({
@@ -21,10 +22,11 @@ function AddTodo() {
     if (!todo.todo) return;
     const tododata = await axios.post("/create", todo);
     console.log(tododata);
-    setTodo({
-      todo: tododata.data.data.todo,
-      isCompleted: tododata.data.data.isCompleted,
-    });
+    setData((prev) => [tododata.data.data, ...prev]);
+    setTodo((prev) => ({
+      ...prev,
+      todo: "",
+    }));
   };
   return (
     <>
