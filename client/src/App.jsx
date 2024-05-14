@@ -9,6 +9,7 @@ function App() {
     <TodoProvider>
       <Nav />
       <AddTodo />
+
       <Table />
     </TodoProvider>
   );
